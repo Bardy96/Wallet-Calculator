@@ -32,7 +32,7 @@ const checkForm = () => {
     if (nameInput.value !== '' && amountInput.value !== '' && categorySelect.value !== 'none') {
         createNewTransaction();
     } else {
-        alert('Wypełnij wszystkie pola!')
+        alert('Complete all fields!')
     }
 }
 
@@ -55,7 +55,7 @@ const createNewTransaction = () => {
         </p>
         <p class="transaction-amount">
         ${amountInput.value}zł 
-        <button class="delete" onclick="deleteTransatcion(${ID})"><i class="fas fa-times"></i></button>
+        <button class="delete" onclick="deleteTransaction(${ID})"><i class="fas fa-times"></i></button>
         </p>
     `;
 
@@ -94,6 +94,27 @@ const countMoney = (money) => {
     availableMoney.textContent = `${newMoney} zł`
 }
 
+const deleteTransaction = (id) => { 
+    const transactionToDelete = document.getElementById(id)
+    const transactionAmount = parseFloat(transactionToDelete.childNodes[3].innerText)
+    const indexOfTransaction = moneyArr.indexOf(transactionAmount)
+    
+    moneyArr.splice(indexOfTransaction, 1)
+
+    transactionToDelete.classList.contains('income') ? incomeSection.removeChild(transactionToDelete) : expensesSection.removeChild(transactionToDelete)
+
+    countMoney(moneyArr)
+ }
+
+const deleteAllTransactions = () => { 
+    incomeSection.innerHTML = '<h3>Income</h3>'
+    expensesSection.innerHTML = '<h3>Income</h3>'
+    availableMoney.textContent = '0zł'
+    moneyArr = [0]
+ }
+
+
 addTransactionBtn.addEventListener('click', showPanel)
 cancelBtn.addEventListener('click', closePanel)
 saveBtn.addEventListener('click', checkForm)
+deleteAllBtn.addEventListener('click', deleteAllTransactions)
